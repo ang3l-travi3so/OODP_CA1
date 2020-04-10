@@ -9,8 +9,8 @@ import java.util.List;
 public class MainOODP_CA1 {
 
 	static List<Country> countryList = new ArrayList<Country>();
-	static StringBuffer messageToClient = new StringBuffer();
-	
+	static StringBuffer messageToClient = new StringBuffer("-0-");
+
 	public static void main(String[] args) {
 
 		// Variables
@@ -21,7 +21,7 @@ public class MainOODP_CA1 {
 		// IN TERMS OF CUSTOMER
 		// IN OTHER WORDS, THE PASSING OF DATA IS GOING
 		// TO BE CUSTOMERS OBJECTS
-		
+
 		// The Singleton pattern implemented will ensure only
 		// one instance of the db is created
 
@@ -46,6 +46,7 @@ public class MainOODP_CA1 {
 				dout.flush();
 				switch (choice[0]) {
 				case "all":
+					messageToClient.delete(0, messageToClient.length());
 					System.out.println("Printing all the countries: ");
 					// GETTING ALL OF THE CUSTOMERS IN THE DATABASE
 					ArrayList<Country> country = db.getCountries();
@@ -53,35 +54,44 @@ public class MainOODP_CA1 {
 					// PRINTING THEM TO THE CONSOLE
 					for (Country c : country) {
 						System.out.println(c);
-						messageToClient.append(c);
+						messageToClient.append(c + "\n");
 					}
 					break;
 				case "code":
+					messageToClient.delete(0, messageToClient.length());
 					System.out.println("Retrieving the details of the country with code: " + str.substring(5));
 					// GETTING ONLY THE CUSTOMER THAT HAS THE GIVEN
 					// ID
 					Country c = db.findCountryByCode(str.substring(5));
 					// PRINTING IT TO THE CONSOLE
 					System.out.println(c);
-					messageToClient.append(c);
+					if(c!=null)
+						messageToClient.append(c);
+					else
+						messageToClient.append("no records found!");
 					System.out.println();
 					break;
 				case "name":
+					messageToClient.delete(0, messageToClient.length());
 					System.out.println("Retrieving the details of the country with name: " + str.substring(5));
 					// GETTING ONLY THE CUSTOMER THAT HAS THE GIVEN
 					// ID
 					ArrayList<Country> names = db.findCountryByName(str.substring(5));
 					// PRINTING IT TO THE CONSOLE
-					for (Iterator iterator = names.iterator(); iterator.hasNext();) {
-						Country country2 = (Country) iterator.next();
-						System.out.println(country2);
-						messageToClient.append(country2);
-						System.out.println();
-						
-					}
-					
+					if(names!=null && names.size()!=0)
+						for (Iterator<Country> iterator = names.iterator(); iterator.hasNext();) {
+							Country country2 = iterator.next();
+							System.out.println(country2);
+							messageToClient.append(country2);
+							System.out.println();
+
+						}
+					else
+						messageToClient.append("no records found!");
+
 					break;
 				case "add":
+					messageToClient.delete(0, messageToClient.length());
 					System.out.println("adding new country with the followind detals : " + str.substring(4).replace("@", " "));
 					// TOKENIZING THE VALUES THE USER HAS PROVIDED
 					String[] values = str.substring(4).split("@");
@@ -96,13 +106,18 @@ public class MainOODP_CA1 {
 						// CONTROL OF THE DATA
 						countryList.add(newCountry);
 						// ADDING THE NEW CUSTOMER INTO THE DATABASE
-						System.out.println(db.saveCountry(newCountry));
-						messageToClient.append("record created.");
+						if(!db.saveCountry(newCountry)) {
+							messageToClient.append("Plesae check your input data, creation of the country failed");
+							System.out.println("Plesae check your input data, creation of the country failed");
+						}
+						else
+							messageToClient.append("Country created.");
 						System.out.println();
-					} catch (Exception e) {
-						System.out.println("The area has to be a number. Creation of the country failed");
-					}
-					
+					}catch (Exception e) {
+						messageToClient.append("Plesae check your input data, creation of the country failed");
+						System.out.println("Plesae check your input data, creation of the country failed");
+					} 
+
 					break;
 				case "quit":
 					serverSocket.close();
@@ -120,7 +135,6 @@ public class MainOODP_CA1 {
 					repeat = false;
 					System.out.println("Terminated");
 				}
-				messageToClient = new StringBuffer();
 			}
 
 		} catch (Exception e) {

@@ -141,9 +141,7 @@ public class MySQLCountryDAO implements CountryDAO {
 						
 					//	country.add(new Country(code, name, continent, surfaceArea,surfaceArea));	
 					}
-					
-					return null;
-					
+										
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -166,8 +164,7 @@ public class MySQLCountryDAO implements CountryDAO {
 		String query = "INSERT INTO country (code, name, continent, surfaceArea, HeadOfState) VALUES ('"+code+"', '"+name+"', '"+continent+"', "+surfaceArea+", '"+headOfState+"');";
 		
 		DataSource db = new DataSource();
-		db.save(query);
-		return false;
+		return db.save(query);
 	}
 
 }
