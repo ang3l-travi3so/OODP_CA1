@@ -1,7 +1,9 @@
 
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class CliInterface {
 	
@@ -16,9 +18,11 @@ public class CliInterface {
 			Socket socket = new Socket("localhost", 6666);
 			// THE INPUT FROM THE USER IS HANDLED BY A JAVA SCANNER OBJECT THAT WILL READ FROM KEYBOARD
 			DataOutputStream dout = new DataOutputStream(socket.getOutputStream());
+			DataInputStream dis = new DataInputStream(socket.getInputStream());
 			Scanner keyboard = new Scanner(System.in);
 			String key = "";
 			StringBuffer record;
+			String str = "";
 			// AN INFINITE WHILE LOOP WILL REITERATE SO THE USER CAN PROGRESS WITH MULTIPLE COICHES UNTIL DECIDES TO QUIT
 			while (repeat) {
 				System.out.println("please make a choice: ");
@@ -78,6 +82,14 @@ public class CliInterface {
 				default:
 					break;
 				}
+				try {
+					dis = new DataInputStream(socket.getInputStream());
+					str = (String) dis.readUTF();
+					System.out.println(str);
+				} catch (Exception e) {
+					System.out.println("Terminated");
+				}
+				
 			}
 		} catch (Exception e) {
 			System.out.println(e);
