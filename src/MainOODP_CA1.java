@@ -117,7 +117,7 @@ public class MainOODP_CA1 {
 					dis = new DataInputStream(socket.getInputStream());
 					str = (String) dis.readUTF();
 				} catch (Exception e) {
-				//	repeat = false;
+					repeat = false;
 					System.out.println("Terminated");
 				}
 				messageToClient = new StringBuffer();

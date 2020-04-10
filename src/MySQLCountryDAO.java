@@ -156,7 +156,7 @@ public class MySQLCountryDAO implements CountryDAO {
 	@Override
 	public boolean saveCountry(Country country) {
 		
-		String code = "";
+		String code = country.getCode();
 		String name = country.getName();
 		String continent = country.getContinent();
 		float surfaceArea = country.getSurfaceArea();
@@ -165,7 +165,7 @@ public class MySQLCountryDAO implements CountryDAO {
 		// THIS IS THE METHOD IN CHARGE OF CREATE THE QUERY
 		String query = "INSERT INTO country (code, name, continent, surfaceArea, HeadOfState) VALUES ('"+code+"', '"+name+"', '"+continent+"', "+surfaceArea+", '"+headOfState+"');";
 		
-		DataSource db = null;
+		DataSource db = new DataSource();
 		db.save(query);
 		return false;
 	}
